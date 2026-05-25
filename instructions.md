@@ -24,7 +24,17 @@ chmod +x ~/.claude/hooks/*.sh
 
 ## 2. Install CLI tools
 
-### OpenAI Codex CLI (powers the review hooks)
+### OpenAI Codex (powers the review hooks)
+
+The Codex integration uses the official Claude Code plugin ([codex-plugin-cc](https://github.com/openai/codex-plugin-cc)). It's already configured in `settings.json` under `extraKnownMarketplaces`:
+
+```json
+"openai-codex": {
+  "source": { "source": "github", "repo": "openai/codex-plugin-cc" }
+}
+```
+
+You also need the Codex CLI for the shell hooks:
 
 ```bash
 npm install -g @openai/codex

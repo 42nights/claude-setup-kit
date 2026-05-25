@@ -67,7 +67,7 @@ The Codex hooks implement **structural separation** — a different model (OpenA
 
 ### Plugins & Connectors
 
-**Plugins** (marketplace): Vercel, Railway, Paper design system
+**Plugins** (marketplace): Vercel, Railway, Paper design system, OpenAI Codex ([codex-plugin-cc](https://github.com/openai/codex-plugin-cc))
 
 **Claude.ai connectors** (MCP): Linear, Granola, Notion, Google Drive, Gmail
 
@@ -81,5 +81,5 @@ The Codex hooks implement **structural separation** — a different model (OpenA
 
 - Node.js 20+
 - Python 3.9+
-- [OpenAI Codex CLI](https://github.com/openai/codex) (`npm i -g @openai/codex`)
+- [OpenAI Codex plugin](https://github.com/openai/codex-plugin-cc) (installed via marketplace in `settings.json`)
 - `OPENAI_API_KEY` environment variable

@@ -92,13 +92,25 @@ gh api /orgs/<your-org>/installations \
 
 ---
 
-### OpenAI Codex CLI (Overseer)
+### OpenAI Codex (Overseer)
 
 Structural code review from a different model. Used as the "second pair of eyes" in hooks.
 
 **What it does:** Reviews uncommitted diffs and plans from a completely separate model/session. Catches issues Claude might miss because it's not reviewing its own work.
 
-**Setup:**
+**Setup (plugin — recommended):**
+
+The [codex-plugin-cc](https://github.com/openai/codex-plugin-cc) plugin is already configured in `settings.json` under `extraKnownMarketplaces`. It lets you use Codex directly from Claude Code to review code or delegate tasks.
+
+```json
+"openai-codex": {
+  "source": { "source": "github", "repo": "openai/codex-plugin-cc" }
+}
+```
+
+**Setup (CLI — for shell hooks):**
+
+The review hooks also call the Codex CLI directly:
 
 ```bash
 npm install -g @openai/codex
@@ -111,7 +123,7 @@ export OPENAI_API_KEY=sk-...  # add to ~/.zshrc
 codex --version
 ```
 
-**Connects to:** Powers `codex-review-diff.sh` (Stop + PostToolUse hooks) and `codex-review-plan.sh` (PreToolUse on ExitPlanMode). This is the structural separation pattern — a different model reviewing the primary agent's output.
+**Connects to:** Powers `codex-review-diff.sh` (Stop + PostToolUse hooks) and `codex-review-plan.sh` (PreToolUse on ExitPlanMode). The plugin provides in-session delegation; the CLI hooks provide structural separation (different process, no shared context).
 
 ---
 
