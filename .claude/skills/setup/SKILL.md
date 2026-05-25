@@ -17,6 +17,7 @@ Walk the user through each step in order. Check what's already done and skip it.
 git clone https://github.com/42nights/claude-setup-kit.git /tmp/kit
 cp -r /tmp/kit/.claude ~/
 chmod +x ~/.claude/hooks/*.sh
+echo 'export CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING=1' >> ~/.zshrc
 ```
 
 ### 2. Install CLI tools
@@ -24,31 +25,35 @@ chmod +x ~/.claude/hooks/*.sh
 Check which are missing and install only those:
 
 ```bash
-# Check and install
 command -v codex || npm install -g @openai/codex
 command -v oxlint || npm install -g oxlint
 command -v prettier || npm install -g prettier
-python3 -c "import pyrefly" 2>/dev/null || pip3 install pyrefly
+command -v ruff || pip3 install ruff
+command -v browser-harness || pip install browser-harness
 ```
 
 Ask the user for their `OPENAI_API_KEY` if `codex` is installed but the env var is not set.
 
-### 3. Connect claude.ai services
+### 3. Connect services
 
-Guide the user through connecting each service. Use `/connect` to start the OAuth flow for each:
+Go through each connector one at a time. Explain what it enables, ask if they want it, then connect and verify.
 
-**Required connectors:**
+Each connector has two states:
 
-- **Linear** — issue tracking, project management. "Connect Linear so I can create and manage issues."
-- **Gmail** — email access for verification flows and context. "Connect Gmail so I can read and send emails."
+- **Not yet authed** → an `authenticate` tool is visible (e.g., `mcp__claude_ai_Linear__authenticate`). Call it to get an OAuth URL, tell the user to open it and authorize, then the real tools appear.
+- **Already authed** → real tools are visible (e.g., `mcp__claude_ai_Linear__list_teams`). Skip to verification.
 
-**Recommended connectors:**
+For each connector below, check which state it's in, then act accordingly.
 
-- **Granola** — meeting transcripts. "Connect Granola to pull action items from meetings into Linear."
-- **Notion** — docs and databases. "Connect Notion to read your team's documentation."
-- **Google Drive** — file access. "Connect Google Drive to read shared documents."
+| Connector        | What it enables                     | Verify with                                       |
+| ---------------- | ----------------------------------- | ------------------------------------------------- |
+| **Linear**       | Issues, projects, cycles, documents | `list_teams` returns teams                        |
+| **Granola**      | Meeting transcripts → action items  | `get_account_info` returns email                  |
+| **Notion**       | Read/write pages and databases      | `authenticate` tool disappears, real tools appear |
+| **Google Drive** | Read shared files                   | `authenticate` tool disappears, real tools appear |
+| **Gmail**        | Search, read, send emails           | `authenticate` tool disappears, real tools appear |
 
-For each one, tell the user what it enables and ask if they want to connect it. Don't connect all of them silently.
+After each connection, summarize what's now available (e.g., "Linear connected — you can now create issues, manage projects, and track cycles from Claude Code").
 
 ### 4. Verify plugins
 
@@ -58,6 +63,8 @@ Check that marketplace plugins are registered in settings.json:
 - Railway (`railwayapp/railway-skills`)
 - Paper (`paper-design/agent-plugins`)
 - OpenAI Codex (`openai/codex-plugin-cc`)
+- GSAP Skills (`greensock/gsap-skills`)
+- Caveman (`JuliusBrussee/caveman`)
 
 ### 5. Set up rules
 
@@ -70,14 +77,14 @@ Run a quick check:
 ```bash
 codex --version
 oxlint --version
-pyrefly --version
+ruff --version
 npx prettier --version
 ```
 
 Confirm hooks exist:
 
 ```bash
-ls ~/.claude/hooks/codex-review-*.sh
+ls ~/.claude/hooks/codex-review-*.sh ~/.claude/hooks/auto-format.sh
 ```
 
 Confirm settings.json is valid:
@@ -91,6 +98,6 @@ python3 -c "import json; json.load(open('$HOME/.claude/settings.json')); print('
 Tell the user:
 
 - "Your Codex overseer will review every diff and plan automatically"
-- "Pyrefly checks Python, oxlint checks JS/TS, Prettier formats everything — all on save"
+- "Ruff checks Python, oxlint checks JS/TS, auto-format.sh formats 7 languages — all on save"
 - "Edit `rules/instruct.md` anytime to change what Codex enforces"
 - "Use `/find-skills` to discover more community skills"
