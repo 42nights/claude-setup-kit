@@ -2,19 +2,20 @@
 
 When a skill is needed, read its SKILL.md directly — no need to search the file tree. When a new skill is installed or removed, update this list in CLAUDE.md to keep it current.
 
-| Skill                      | Path                                                 | What it does                                                                                              |
-| -------------------------- | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| browser-harness            | `.claude/skills/browser-harness/SKILL.md`            | Browser automation via CDP — screenshots, coordinate clicks, scraping. Connects to user's running Chrome. |
-| interface-design           | `.claude/skills/interface-design/SKILL.md`           | UI craft for dashboards, apps, tools — spacing, depth, typography, critique loop.                         |
-| gcloud                     | `.claude/skills/gcloud/SKILL.md`                     | GCP architecture — Cloud Run, GKE, BigQuery, IAM, cost optimization.                                      |
-| stripe                     | `.claude/skills/stripe/SKILL.md`                     | Stripe API — checkout, subscriptions, webhooks, usage-based billing, customer portal.                     |
-| vercel                     | `.claude/skills/vercel/SKILL.md`                     | Frontend — React, Next.js, Tailwind, bundle analysis, accessibility.                                      |
-| better-auth-best-practices | `.claude/skills/better-auth-best-practices/SKILL.md` | Better Auth server/client config, sessions, plugins, adapters.                                            |
-| create-auth-skill          | `.claude/skills/create-auth-skill/SKILL.md`          | Scaffold auth flows with Better Auth — detect framework, configure, add OAuth.                            |
-| emil-design-eng            | `.claude/skills/emil-design-eng/SKILL.md`            | Emil Kowalski's UI polish philosophy — animation, component design, invisible details.                    |
-| find-skills                | `.claude/skills/find-skills/SKILL.md`                | Discover and install community skills via `npx skills`.                                                   |
-| routines                   | `.claude/skills/routines/SKILL.md`                   | Scheduled automations — email outreach, PR review, deploy checks, standups.                               |
-| setup                      | `.claude/skills/setup/SKILL.md`                      | Guided setup — CLI tools, connectors, plugins, rules configuration.                                       |
+| Skill                      | Path                                                 | What it does                                                                                               |
+| -------------------------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| browser-harness            | `.claude/skills/browser-harness/SKILL.md`            | Browser automation via CDP — screenshots, coordinate clicks, scraping. Connects to user's running Chrome.  |
+| interface-design           | `.claude/skills/interface-design/SKILL.md`           | UI craft for dashboards, apps, tools — spacing, depth, typography, critique loop.                          |
+| gcloud                     | `.claude/skills/gcloud/SKILL.md`                     | GCP architecture — Cloud Run, GKE, BigQuery, IAM, cost optimization.                                       |
+| stripe                     | `.claude/skills/stripe/SKILL.md`                     | Stripe API — checkout, subscriptions, webhooks, usage-based billing, customer portal.                      |
+| vercel                     | `.claude/skills/vercel/SKILL.md`                     | Frontend — React, Next.js, Tailwind, bundle analysis, accessibility.                                       |
+| better-auth-best-practices | `.claude/skills/better-auth-best-practices/SKILL.md` | Better Auth server/client config, sessions, plugins, adapters.                                             |
+| create-auth-skill          | `.claude/skills/create-auth-skill/SKILL.md`          | Scaffold auth flows with Better Auth — detect framework, configure, add OAuth.                             |
+| emil-design-eng            | `.claude/skills/emil-design-eng/SKILL.md`            | Emil Kowalski's UI polish philosophy — animation, component design, invisible details.                     |
+| find-skills                | `.claude/skills/find-skills/SKILL.md`                | Discover and install community skills via `npx skills`.                                                    |
+| routines                   | `.claude/skills/routines/SKILL.md`                   | Scheduled automations — email outreach, PR review, deploy checks, standups.                                |
+| setup                      | `.claude/skills/setup/SKILL.md`                      | Guided setup — CLI tools, connectors, plugins, rules configuration.                                        |
+| email-rotation             | `.claude/skills/email-rotation/SKILL.md`             | Rotate outbound emails across multiple domains with rate limiting, warm-up, and deliverability safeguards. |
 
 **Plugins (installed via settings.json, not local skill folders):**
 
