@@ -54,11 +54,20 @@ Connect in **claude.ai > Settings > Connected Apps**: Linear, Granola, Notion, G
     ├── emil-design-eng/               # Emil Kowalski's UI polish philosophy
     └── find-skills/                   # Discover and install community skills
 
+rules/
+└── instruct.md                        # Your project rules — Codex enforces these
+
 instructions.md                        # Full setup guide for every component
 flow.md                                # How everything chains together
 hooks.md                               # What each hook does and why
 external.md                            # CodeRabbit, Greptile, Blacksmith, CLI tools
 ```
+
+## Rules
+
+The `rules/` folder is your alignment layer. Write architecture, security, testing, or style rules in markdown — the Codex hooks read every `.md` file in `rules/` and enforce them when reviewing Claude's diffs and plans.
+
+Edit `rules/instruct.md` or add more files anytime. Codex picks them up on the next review.
 
 ## Docs
 
