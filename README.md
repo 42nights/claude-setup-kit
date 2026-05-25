@@ -8,7 +8,7 @@ Give Claude Code this link:
 https://github.com/42nights/claude-setup-kit
 ```
 
-Then say: **"set up my claude using this repo"** or **"Add these on top of my existing claude"**
+Then say: **"set up my claude using this repo"** or **"add this on top of my existing claude"**
 
 ### Manual install
 
