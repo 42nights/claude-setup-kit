@@ -53,7 +53,8 @@ Connect in **claude.ai > Settings > Connected Apps**: Linear, Granola, Notion, G
     ├── create-auth-skill/             # Scaffold auth flows with Better Auth
     ├── emil-design-eng/               # Emil Kowalski's UI polish philosophy
     ├── find-skills/                   # Discover and install community skills
-    └── setup/                         # Guided setup — CLI tools, connectors, plugins, rules
+    ├── setup/                         # Guided setup — CLI tools, connectors, plugins, rules
+    └── routines/                      # Scheduled automations — email outreach, PR review, deploys
 
 rules/
 └── instruct.md                        # Your project rules — Codex enforces these
