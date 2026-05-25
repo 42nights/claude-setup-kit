@@ -26,12 +26,12 @@
           },
           {
             "type": "command",
-            "command": "ls *.py **/*.py 2>/dev/null | head -1 | grep -q . && (ruff check . >&2 || exit 2) || true",
+            "command": "if ls *.py **/*.py 2>/dev/null | head -1 | grep -q .; then ruff check . >&2 || exit 2; fi",
             "timeout": 30
           },
           {
             "type": "command",
-            "command": "(ls *.ts *.tsx *.js *.jsx **/*.ts **/*.tsx **/*.js **/*.jsx 2>/dev/null | head -1 | grep -q .) && (oxlint >&2 || exit 2) || true",
+            "command": "if ls *.ts *.tsx *.js *.jsx **/*.ts **/*.tsx **/*.js **/*.jsx 2>/dev/null | head -1 | grep -q .; then oxlint >&2 || exit 2; fi",
             "timeout": 30
           }
         ]
