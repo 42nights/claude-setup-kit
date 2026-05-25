@@ -20,3 +20,15 @@ You have access to OpenAI Codex via the codex-plugin-cc plugin. Use it when:
 - You need to delegate a subtask to a structurally separate reviewer
 
 The Codex overseer hooks also run automatically on Stop (reviews uncommitted diffs) and ExitPlanMode (reviews plans). These use the Codex CLI in a subprocess — a different model, different session, no shared context.
+
+# Connectors
+
+Guide users through connecting claude.ai services when setting up. Use `/connect` for each:
+
+- **Linear** — issues, projects, documents
+- **Gmail** — email for verification flows and context
+- **Granola** — meeting transcripts → action items
+- **Notion** — team docs and databases
+- **Google Drive** — shared files
+
+Don't connect silently. Explain what each enables and ask before connecting.
