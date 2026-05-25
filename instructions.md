@@ -5,14 +5,9 @@ Everything in `.claude/` goes into your home directory at `~/.claude/`. The hook
 ## Prerequisites
 
 ```bash
-# Node.js (for Prettier, Codex)
-node --version  # v20+
-
-# Python 3 (for Pyrefly)
-python3 --version
-
-# GitHub CLI
-gh --version
+node --version    # v20+ (for Prettier, Codex)
+python3 --version # (for Ruff)
+gh --version      # GitHub CLI
 ```
 
 ## 1. Install the .claude folder
@@ -20,154 +15,47 @@ gh --version
 ```bash
 cp -r .claude ~/
 chmod +x ~/.claude/hooks/*.sh
+
+# Add environment defaults to your shell profile
+echo 'export CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING=1' >> ~/.zshrc
 ```
 
 ## 2. Install CLI tools
 
-### OpenAI Codex (powers the review hooks)
-
-The Codex integration uses the official Claude Code plugin ([codex-plugin-cc](https://github.com/openai/codex-plugin-cc)). It's already configured in `settings.json` under `extraKnownMarketplaces`:
-
-```json
-"openai-codex": {
-  "source": { "source": "github", "repo": "openai/codex-plugin-cc" }
-}
+```bash
+npm install -g @openai/codex prettier oxlint
+pip3 install ruff browser-harness
 ```
 
-You also need the Codex CLI for the shell hooks:
+Set your OpenAI key for the Codex review hooks:
 
 ```bash
-npm install -g @openai/codex
-export OPENAI_API_KEY=sk-...  # add to ~/.zshrc
+echo 'export OPENAI_API_KEY=sk-...' >> ~/.zshrc
 ```
 
-Codex is used as a structurally separate reviewer — a different model/session reviews Claude's output to prevent self-checking bias.
-
-### Pyrefly (Python type checker)
-
-```bash
-pip3 install pyrefly
-```
-
-Only runs on projects with `.py` files. The hook auto-detects.
-
-### oxlint (JS/TS linter)
-
-```bash
-npm install -g oxlint
-```
-
-Only runs on projects with `.ts`/`.js`/`.tsx`/`.jsx` files. The hook auto-detects. 50-100x faster than ESLint.
-
-### Prettier (auto-formatter)
-
-```bash
-npm install -g prettier
-```
-
-Runs automatically on every file Claude edits or writes. No config needed — Prettier uses its defaults or your project's `.prettierrc`.
-
-### browser-harness (browser automation via CDP)
-
-```bash
-# Follow install instructions at:
-# https://github.com/browser-use/browser-harness
-pip install browser-harness
-```
-
-Used for automating 3rd-party service sign-ups (CodeRabbit, Greptile, etc.) by controlling your running Chrome via CDP. The global CLAUDE.md references the SKILL.md from this repo.
+For details on each tool (what it does, how it connects, gotchas), see [external.md](external.md).
 
 ## 3. Claude.ai Connectors (MCP Servers)
 
-These are configured in Claude.ai settings, not locally. Go to **claude.ai > Settings > Connected Apps** or the Claude Code connector settings.
+Configured in **claude.ai > Settings > Connected Apps**, not locally. One-time OAuth setup per service:
 
-### Linear
+| Connector    | What it enables                                                   |
+| ------------ | ----------------------------------------------------------------- |
+| Linear       | Issues, projects, comments, milestones, documents, labels, cycles |
+| Granola      | Meeting transcripts, details, folders                             |
+| Notion       | Read/write pages and databases                                    |
+| Google Drive | Read files                                                        |
+| Gmail        | Search, read, send emails (useful for GitHub sudo verification)   |
 
-Enables: create/read issues, projects, comments, milestones, documents, labels, cycles.
+## 4. Plugins
 
-**Setup:** Connect via OAuth in Claude.ai settings. Select your Linear workspace.
+All plugins are pre-configured in [`.claude/settings.json`](.claude/settings.json) under `enabledPlugins` and `extraKnownMarketplaces`. No manual setup needed — they activate on first use.
 
-**Key tools:** `get_issue`, `save_issue`, `list_issues`, `get_project`, `save_project`, `list_projects`, `save_comment`, `get_document`
-
-### Granola
-
-Enables: query meeting transcripts, get meeting details, list folders.
-
-**Setup:** Connect via OAuth in Claude.ai settings.
-
-**Key tools:** `query_granola_meetings`, `get_meeting_transcript`, `list_meetings`, `get_account_info`
-
-### Notion
-
-Enables: read/write Notion pages and databases.
-
-**Setup:** Connect via OAuth in Claude.ai settings. Authorize access to your workspace.
-
-### Google Drive
-
-Enables: read files from Google Drive.
-
-**Setup:** Connect via OAuth in Claude.ai settings.
-
-### Gmail
-
-Enables: read, search, and send emails. Useful for automated sudo verification flows (GitHub sends codes via email) and pulling context from email threads.
-
-**Setup:** Connect via OAuth in Claude.ai settings. Authorize your Gmail account.
-
-**Key tools:** search emails, read email content, send emails
-
-## 4. Plugins (Marketplace)
-
-Configured in `settings.json` under `enabledPlugins` and `extraKnownMarketplaces`.
-
-### Vercel
-
-```json
-"enabledPlugins": {
-  "vercel@claude-plugins-official": true
-}
-```
-
-Provides deployment management, AI architecture, and performance optimization agents.
-
-### Railway
-
-```json
-"extraKnownMarketplaces": {
-  "railway-skills": {
-    "source": { "source": "github", "repo": "railwayapp/railway-skills" }
-  }
-}
-```
-
-Provides project/service/deployment management, environment variables, logs, metrics.
-
-### Paper (Design System)
-
-```json
-"extraKnownMarketplaces": {
-  "paper": {
-    "source": { "source": "github", "repo": "paper-design/agent-plugins" }
-  }
-}
-```
-
-Design system tokens and components.
+See the plugin table in [`.claude/CLAUDE.md`](.claude/CLAUDE.md#available-skills) for the full list with descriptions.
 
 ## 5. Skills
 
-### interface-design
-
-Located at `.claude/skills/interface-design/`. A comprehensive UI design skill for building dashboards, apps, and tools with craft and consistency.
-
-Includes:
-
-- `SKILL.md` — core principles, spacing grids, depth systems, typography
-- `references/principles.md` — design philosophy
-- `references/example.md` — worked examples
-- `references/validation.md` — quality checks
-- `references/critique.md` — self-review patterns
+All local skills live in `.claude/skills/`. The full registry with paths and descriptions is in [`.claude/CLAUDE.md`](.claude/CLAUDE.md#available-skills) — Claude reads that table directly instead of scanning the file tree.
 
 ### Custom Commands (slash commands)
 
@@ -181,13 +69,72 @@ Located in `.claude/commands/`:
 | `/extract`  | Pull design patterns from existing code into a system.md         |
 | `/status`   | Show current design system state                                 |
 
-## 6. Settings Explained
+## 6. Settings
 
-Key settings in `settings.json`:
+All settings are in [`.claude/settings.json`](.claude/settings.json). Key defaults this kit ships:
 
 ```
-defaultMode: "auto"          — auto-approve safe operations
-effortLevel: "xhigh"         — maximum reasoning effort
-agentPushNotifEnabled: true  — get push notifications from background agents
-skipAutoPermissionPrompt: true
+defaultMode: "auto"              — auto-approve safe operations
+effortLevel: "xhigh"            — maximum reasoning effort
+alwaysThinkingEnabled: true     — extended thinking on by default
+showThinkingSummaries: true     — show full thinking summaries
+tui: "fullscreen"               — flicker-free rendering, mouse support
+agentPushNotifEnabled: true     — push notifications from background agents
 ```
+
+### Research Preview / Experimental Options
+
+| Setting                      | Type   | Kit Default    | What it does                                             |
+| ---------------------------- | ------ | -------------- | -------------------------------------------------------- |
+| `alwaysThinkingEnabled`      | bool   | **`true`**     | Extended thinking on by default                          |
+| `showThinkingSummaries`      | bool   | `true`         | Show full thinking instead of collapsed blocks           |
+| `effortLevel`                | enum   | `"xhigh"`      | Reasoning depth: `low`, `medium`, `high`, `xhigh`, `max` |
+| `tui`                        | enum   | `"fullscreen"` | Alt-screen rendering, no flicker, mouse support          |
+| `fastMode`                   | bool   | `false`        | 2.5x faster Opus at higher cost. Toggle with `/fast`     |
+| `skillListingBudgetFraction` | number | `0.01`         | Fraction of context for skill descriptions (0-1)         |
+| `maxSkillDescriptionChars`   | number | `1536`         | Max chars per skill in context                           |
+| `worktree.bgIsolation`       | enum   | `"worktree"`   | Isolation for background agent edits                     |
+| `disableRemoteControl`       | bool   | `false`        | Disable remote control feature                           |
+
+**Environment variables (set in `~/.zshrc`):**
+
+| Variable                                | Effect                                                           |
+| --------------------------------------- | ---------------------------------------------------------------- |
+| `CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING` | Fixed thinking budget instead of adaptive (**kit default: `1`**) |
+| `CLAUDE_CODE_DISABLE_THINKING`          | Force thinking off                                               |
+| `CLAUDE_CODE_DISABLE_1M_CONTEXT`        | Remove 1M context models from picker                             |
+| `CLAUDE_CODE_DISABLE_FAST_MODE`         | Disable fast mode entirely                                       |
+| `CLAUDE_CODE_NO_FLICKER`                | Enable fullscreen rendering (legacy)                             |
+| `CLAUDE_CODE_DISABLE_MOUSE`             | Disable mouse capture in fullscreen                              |
+| `CLAUDE_CODE_SCROLL_SPEED`              | Mouse wheel speed multiplier (1-20)                              |
+| `CLAUDE_CODE_DISABLE_AUTO_MEMORY`       | Disable auto memory                                              |
+| `CLAUDE_CODE_ENABLE_AWAY_SUMMARY`       | Show session recap when returning                                |
+| `CLAUDE_CODE_EFFORT_LEVEL`              | Set effort level via env                                         |
+| `DISABLE_AUTOUPDATER`                   | Disable auto-updates                                             |
+
+## 7. Hooks
+
+All hooks are configured in `settings.json`. See [hooks.md](hooks.md) for detailed documentation, dedup logic, and how each hook connects to the workflow.
+
+## 8. Autonomous & Long-Running Modes
+
+### Goal Mode
+
+Set a completion condition and Claude keeps working automatically until it's met. A small fast model (Haiku) evaluates after each turn.
+
+```bash
+/goal all tests pass and lint is clean     # Set a goal
+/goal                                       # Check status
+/goal clear                                 # Remove goal
+```
+
+- Per-session only, no persistent setting
+- Requires Claude Code v2.1.139+
+- Best for tasks with verifiable end states: "tests pass", "build succeeds", "migration complete"
+
+### Long-Running Sessions
+
+- **Remote sessions (Desktop/Web):** Run on Anthropic's cloud — continues if you close the app.
+- **Background agents:** Launch with `run_in_background: true`. You get notified on completion.
+- **Scheduled routines:** Use `/schedule` or the routines skill for cron-based recurring tasks.
+- **Remote Control:** Steer a local session from another device via `--remote-control`.

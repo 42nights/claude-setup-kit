@@ -18,13 +18,13 @@ Sends the uncommitted diff to OpenAI Codex CLI for independent review. If Codex 
 
 This is the **structural separation** pattern: a different model (OpenAI) in a different process reviews Claude's work. Prompting alone can't replicate this — the reviewer must be structurally unable to share the author's context.
 
-### Pyrefly Check
+### Ruff Check (Python)
 
 ```
-ls *.py **/*.py → if found → pyrefly check >&2 || exit 2
+ls *.py **/*.py → if found → ruff check . >&2 || exit 2
 ```
 
-Type-checks Python files on every stop. Only runs if the project has `.py` files. Exit code 2 tells Claude to fix the errors before proceeding.
+Lints Python files on every stop. Only runs if the project has `.py` files. Exit code 2 tells Claude to fix the errors before proceeding. Ruff replaces Pyrefly/Flake8 for linting and Black for formatting.
 
 ### oxlint Check
 
@@ -56,15 +56,23 @@ Fire after a tool completes. Cannot block.
 
 Same `codex-review-diff.sh` as the Stop hook, but fires after each Edit or Write. Catches issues incrementally, not just at the end.
 
-### Prettier
+### Auto-Format (`auto-format.sh`)
 
 **Matcher:** `Edit|Write`
 
-```
-jq -r '.tool_input.file_path' | xargs npx prettier --write
-```
+Routes each edited file to the right formatter based on extension:
 
-Auto-formats the file Claude just edited. Uses the project's `.prettierrc` if present, otherwise Prettier defaults. Runs on every language Prettier supports (JS, TS, CSS, HTML, JSON, YAML, MD, etc.).
+| Extension                                                                                 | Formatter                |
+| ----------------------------------------------------------------------------------------- | ------------------------ |
+| `.ts`, `.tsx`, `.js`, `.jsx`, `.css`, `.html`, `.json`, `.yaml`, `.md`, `.vue`, `.svelte` | Prettier                 |
+| `.py`, `.pyi`                                                                             | Ruff (format + lint fix) |
+| `.go`                                                                                     | gofmt                    |
+| `.rs`                                                                                     | rustfmt                  |
+| `.java`                                                                                   | google-java-format       |
+| `.kt`, `.kts`                                                                             | ktlint                   |
+| `.c`, `.h`, `.cpp`, `.hpp`, `.cc`                                                         | clang-format             |
+
+Each formatter only runs if installed (`command -v` check). Exits 0 silently if the formatter is missing — install only the ones you need.
 
 ### Superset Notifications
 

@@ -19,6 +19,7 @@ chmod +x ~/.claude/hooks/*.sh
 npm install -g @openai/codex prettier oxlint
 pip3 install pyrefly
 echo 'export OPENAI_API_KEY=sk-...' >> ~/.zshrc
+echo 'export CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING=1' >> ~/.zshrc
 ```
 
 Connect in **claude.ai > Settings > Connected Apps**: Linear, Granola, Notion, Google Drive, Gmail.
@@ -54,7 +55,9 @@ Connect in **claude.ai > Settings > Connected Apps**: Linear, Granola, Notion, G
     ├── emil-design-eng/               # Emil Kowalski's UI polish philosophy
     ├── find-skills/                   # Discover and install community skills
     ├── setup/                         # Guided setup — CLI tools, connectors, plugins, rules
-    └── routines/                      # Scheduled automations — email outreach, PR review, deploys
+    ├── routines/                      # Scheduled automations — email outreach, PR review, deploys
+    ├── browser-harness/               # Browser automation via CDP — screenshots, clicks, scraping
+    └── gsap-skills (plugin)           # GSAP animations — core API, timelines, ScrollTrigger, React
 
 rules/
 └── instruct.md                        # Your project rules — Codex enforces these
