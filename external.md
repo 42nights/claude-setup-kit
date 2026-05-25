@@ -190,6 +190,30 @@ Adjust the path if your `pyrefly` binary is elsewhere (`which pyrefly` to find i
 
 ---
 
+### oxlint
+
+JS/TS linter. 50-100x faster than ESLint. Runs automatically on Stop if the project has `.ts`/`.js`/`.tsx`/`.jsx` files.
+
+**Setup:**
+
+```bash
+npm install -g oxlint
+```
+
+The hook in `settings.json` auto-detects JS/TS projects:
+
+```json
+{
+  "type": "command",
+  "command": "(ls *.ts *.tsx *.js *.jsx **/*.ts **/*.tsx **/*.js **/*.jsx 2>/dev/null | head -1 | grep -q .) && (oxlint >&2 || exit 2) || true",
+  "timeout": 30
+}
+```
+
+**Reference:** https://oxc.rs/docs/guide/usage/linter
+
+---
+
 ## Formatting
 
 ### Prettier
@@ -267,6 +291,7 @@ Push notifications for agent activity. Fires on session start/end, tool use, per
 | Service         | Install Command               | Verify Command                              |
 | --------------- | ----------------------------- | ------------------------------------------- |
 | Codex CLI       | `npm i -g @openai/codex`      | `codex --version`                           |
+| oxlint          | `npm i -g oxlint`             | `oxlint --version`                          |
 | Pyrefly         | `pip3 install pyrefly`        | `pyrefly --version`                         |
 | Prettier        | `npm i -g prettier`           | `npx prettier --version`                    |
 | browser-harness | `pip install browser-harness` | `which browser-harness`                     |

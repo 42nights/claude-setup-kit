@@ -28,6 +28,11 @@
             "type": "command",
             "command": "ls *.py **/*.py 2>/dev/null | head -1 | grep -q . && ($HOME/Library/Python/3.9/bin/pyrefly check >&2 || exit 2) || true",
             "timeout": 30
+          },
+          {
+            "type": "command",
+            "command": "(ls *.ts *.tsx *.js *.jsx **/*.ts **/*.tsx **/*.js **/*.jsx 2>/dev/null | head -1 | grep -q .) && (oxlint >&2 || exit 2) || true",
+            "timeout": 30
           }
         ]
       }

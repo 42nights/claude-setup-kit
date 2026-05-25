@@ -41,6 +41,14 @@ pip3 install pyrefly
 
 Only runs on projects with `.py` files. The hook auto-detects.
 
+### oxlint (JS/TS linter)
+
+```bash
+npm install -g oxlint
+```
+
+Only runs on projects with `.ts`/`.js`/`.tsx`/`.jsx` files. The hook auto-detects. 50-100x faster than ESLint.
+
 ### Prettier (auto-formatter)
 
 ```bash
@@ -90,6 +98,14 @@ Enables: read/write Notion pages and databases.
 Enables: read files from Google Drive.
 
 **Setup:** Connect via OAuth in Claude.ai settings.
+
+### Gmail
+
+Enables: read, search, and send emails. Useful for automated sudo verification flows (GitHub sends codes via email) and pulling context from email threads.
+
+**Setup:** Connect via OAuth in Claude.ai settings. Authorize your Gmail account.
+
+**Key tools:** search emails, read email content, send emails
 
 ## 4. Plugins (Marketplace)
 

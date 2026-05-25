@@ -1,6 +1,6 @@
 # Claude Setup Kit
 
-Drop-in `.claude/` config with Codex overseer hooks, Pyrefly type checking, Prettier auto-format, an interface-design skill, and integrations for CodeRabbit, Greptile, and Blacksmith.
+Drop-in `.claude/` config with Codex overseer hooks, oxlint + Pyrefly type checking, Prettier auto-format, Gmail MCP, an interface-design skill, and integrations for CodeRabbit, Greptile, and Blacksmith.
 
 ## Quick Start
 
@@ -27,7 +27,7 @@ chmod +x ~/.claude/hooks/*.sh
 Then install the CLI tools:
 
 ```bash
-npm install -g @openai/codex prettier
+npm install -g @openai/codex prettier oxlint
 pip3 install pyrefly browser-harness
 ```
 
@@ -46,6 +46,7 @@ echo 'export OPENAI_API_KEY=sk-...' >> ~/.zshrc
 | `codex-review-diff.sh` | Stop, PostToolUse (Edit/Write) | Sends uncommitted diff to OpenAI Codex for independent review. Blocks if issues found. |
 | `codex-review-plan.sh` | PreToolUse (ExitPlanMode)      | Reviews plans before approval — catches missing edge cases, security gaps.             |
 | Pyrefly check          | Stop                           | Type-checks Python files. Only runs if `.py` files exist.                              |
+| oxlint                 | Stop                           | Lints JS/TS files. Only runs if `.ts`/`.js`/`.tsx`/`.jsx` files exist.                 |
 | Prettier               | PostToolUse (Edit/Write)       | Auto-formats every file Claude edits.                                                  |
 
 The Codex hooks implement **structural separation** — a different model (OpenAI) reviews Claude's output in a clean session with no shared context. This catches issues that self-review cannot.
@@ -68,7 +69,7 @@ The Codex hooks implement **structural separation** — a different model (OpenA
 
 **Plugins** (marketplace): Vercel, Railway, Paper design system
 
-**Claude.ai connectors** (MCP): Linear, Granola, Notion, Google Drive
+**Claude.ai connectors** (MCP): Linear, Granola, Notion, Google Drive, Gmail
 
 ## Docs
 
