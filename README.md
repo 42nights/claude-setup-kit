@@ -1,91 +1,70 @@
 # Claude Setup Kit
 
-Drop-in `.claude/` config with Codex overseer hooks, oxlint + Pyrefly type checking, Prettier auto-format, Gmail MCP, an interface-design skill, and integrations for CodeRabbit, Greptile, and Blacksmith.
-
 ## Quick Start
 
-Give this link to Claude Code:
+Give Claude Code this link:
 
 ```
 https://github.com/42nights/claude-setup-kit
 ```
 
-Then say:
+Then say: **"set up my claude using this repo"**
 
-> set up my claude using this repo
-
-Claude will read the docs and install everything.
-
-## Manual Install
+### Manual install
 
 ```bash
-git clone https://github.com/42nights/claude-setup-kit.git /tmp/claude-setup-kit
-cp -r /tmp/claude-setup-kit/.claude ~/
+git clone https://github.com/42nights/claude-setup-kit.git /tmp/kit
+cp -r /tmp/kit/.claude ~/
 chmod +x ~/.claude/hooks/*.sh
-```
-
-Then install the CLI tools:
-
-```bash
 npm install -g @openai/codex prettier oxlint
-pip3 install pyrefly browser-harness
-```
-
-Set your OpenAI key for the Codex overseer:
-
-```bash
+pip3 install pyrefly
 echo 'export OPENAI_API_KEY=sk-...' >> ~/.zshrc
 ```
 
-## What's Inside
+Connect in **claude.ai > Settings > Connected Apps**: Linear, Granola, Notion, Google Drive, Gmail.
 
-### Hooks (`~/.claude/hooks/`)
+## File Tree
 
-| Hook                   | Event                          | What it does                                                                           |
-| ---------------------- | ------------------------------ | -------------------------------------------------------------------------------------- |
-| `codex-review-diff.sh` | Stop, PostToolUse (Edit/Write) | Sends uncommitted diff to OpenAI Codex for independent review. Blocks if issues found. |
-| `codex-review-plan.sh` | PreToolUse (ExitPlanMode)      | Reviews plans before approval — catches missing edge cases, security gaps.             |
-| Pyrefly check          | Stop                           | Type-checks Python files. Only runs if `.py` files exist.                              |
-| oxlint                 | Stop                           | Lints JS/TS files. Only runs if `.ts`/`.js`/`.tsx`/`.jsx` files exist.                 |
-| Prettier               | PostToolUse (Edit/Write)       | Auto-formats every file Claude edits.                                                  |
+```
+.claude/
+├── CLAUDE.md                          # Global rules (Karpathy-style) + Codex access
+├── settings.json                      # Hooks, plugins, permissions
+│
+├── hooks/
+│   ├── codex-review-diff.sh           # Codex reviews diffs on Stop + Edit/Write
+│   └── codex-review-plan.sh           # Codex reviews plans on ExitPlanMode
+│
+├── commands/
+│   ├── init.md                        # /init — start a UI build with design direction
+│   ├── critique.md                    # /critique — self-review for craft, then rebuild
+│   ├── audit.md                       # /audit — check code vs design system
+│   ├── extract.md                     # /extract — pull patterns from code into system.md
+│   └── status.md                      # /status — show design system state
+│
+└── skills/
+    ├── interface-design/              # UI craft — spacing, depth, typography, critique loop
+    │   └── references/
+    ├── stripe/                        # Stripe API, webhooks, subscriptions, checkout
+    ├── gcloud/                        # GCP — Cloud Run, GKE, BigQuery, IAM, cost optimization
+    │   ├── references/
+    │   └── scripts/
+    ├── vercel/                        # Frontend — React, Next.js, Tailwind, deployment
+    ├── better-auth-best-practices/    # Auth patterns and security
+    ├── create-auth-skill/             # Scaffold auth flows with Better Auth
+    ├── emil-design-eng/               # Emil Kowalski's UI polish philosophy
+    └── find-skills/                   # Discover and install community skills
 
-The Codex hooks implement **structural separation** — a different model (OpenAI) reviews Claude's output in a clean session with no shared context. This catches issues that self-review cannot.
-
-### Skills (`~/.claude/skills/`)
-
-| Skill                          | What it does                                                                                                 |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------ |
-| **interface-design**           | Build dashboards, apps, and tools with craft — spacing grids, depth systems, typography, critique/audit loop |
-| **better-auth-best-practices** | Auth implementation patterns and security best practices                                                     |
-| **create-auth-skill**          | Scaffold auth flows for new projects                                                                         |
-| **emil-design-eng**            | Design engineering principles                                                                                |
-| **find-skills**                | Discover and install community skills                                                                        |
-
-### Commands (`~/.claude/commands/`)
-
-| Command     | Purpose                                                       |
-| ----------- | ------------------------------------------------------------- |
-| `/init`     | Start a UI build — establishes design direction before coding |
-| `/critique` | Self-review for craft gaps, then rebuild                      |
-| `/audit`    | Check code against your design system                         |
-| `/extract`  | Pull patterns from existing code into a system                |
-| `/status`   | Show current design system state                              |
-
-### Plugins & Connectors
-
-**Plugins** (marketplace): Vercel, Railway, Paper design system, OpenAI Codex ([codex-plugin-cc](https://github.com/openai/codex-plugin-cc))
-
-**Claude.ai connectors** (MCP): Linear, Granola, Notion, Google Drive, Gmail
+instructions.md                        # Full setup guide for every component
+flow.md                                # How everything chains together
+hooks.md                               # What each hook does and why
+external.md                            # CodeRabbit, Greptile, Blacksmith, CLI tools
+```
 
 ## Docs
 
-- **[instructions.md](instructions.md)** — Step-by-step setup for every component
-- **[flow.md](flow.md)** — How everything chains together (review loops, Granola→Linear pipeline, design flow)
-- **[external.md](external.md)** — CLI/manual setup for CodeRabbit, Greptile, Blacksmith, and other 3rd-party tools
-
-## Requirements
-
-- Node.js 20+
-- Python 3.9+
-- [OpenAI Codex plugin](https://github.com/openai/codex-plugin-cc) (installed via marketplace in `settings.json`)
-- `OPENAI_API_KEY` environment variable
+| File                               | What's in it                                                            |
+| ---------------------------------- | ----------------------------------------------------------------------- |
+| [instructions.md](instructions.md) | Step-by-step setup: CLI tools, connectors, plugins, skills              |
+| [flow.md](flow.md)                 | How pieces chain: review loop, Granola→Linear, design flow, PR workflow |
+| [hooks.md](hooks.md)               | What each hook does, dedup logic, structural separation explained       |
+| [external.md](external.md)         | CodeRabbit, Greptile, Blacksmith, Codex, Pyrefly, oxlint, Prettier      |
