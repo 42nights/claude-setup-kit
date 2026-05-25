@@ -53,7 +53,13 @@ The Codex hooks implement **structural separation** — a different model (OpenA
 
 ### Skills (`~/.claude/skills/`)
 
-**interface-design** — Build dashboards, apps, and tools with craft. Includes spacing grids, depth systems, typography principles, and a critique/audit loop.
+| Skill                          | What it does                                                                                                 |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| **interface-design**           | Build dashboards, apps, and tools with craft — spacing grids, depth systems, typography, critique/audit loop |
+| **better-auth-best-practices** | Auth implementation patterns and security best practices                                                     |
+| **create-auth-skill**          | Scaffold auth flows for new projects                                                                         |
+| **emil-design-eng**            | Design engineering principles                                                                                |
+| **find-skills**                | Discover and install community skills                                                                        |
 
 ### Commands (`~/.claude/commands/`)
 
